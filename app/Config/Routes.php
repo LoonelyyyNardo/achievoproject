@@ -7,4 +7,10 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 $routes->get('dashboard', 'MainController::dashboard');
-$routes->get('tasks', 'MainController::tasks');
+$routes->get('/dashboard', 'MainController::dashboard');
+
+// Úkoly
+$routes->get('/tasks', 'TasksController::index');
+$routes->get('/tasks/add', 'TasksController::add');   // formulář pro přidání
+$routes->post('/tasks/store', 'TasksController::store');   // zpracování formuláře
+$routes->get('/tasks/delete/(:num)', 'TasksController::delete/$1'); // mazání
