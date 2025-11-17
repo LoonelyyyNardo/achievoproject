@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html lang="cs">
+<style>
+    .form-control:focus {
+        border-color: #0d6efd !important;
+        box-shadow: 0 0 0 0.20rem rgba(13,110,253,.25) !important;
+    }
+</style>
+
 <head>
     <meta charset="UTF-8">
     <title><?= $title ?? 'Achievo' ?></title>

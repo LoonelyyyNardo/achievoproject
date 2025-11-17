@@ -26,7 +26,7 @@
                         <?php if ($task['status'] == 'completed'): ?>
                             <span class="badge bg-success">Hotovo</span>
                         <?php else: ?>
-                            <span class="badge bg-warning text-dark">Čeká</span>
+                            <span class="badge bg-warning">Nesplněno</span>
                         <?php endif; ?>
                     </td>
                     <td>
