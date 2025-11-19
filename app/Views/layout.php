@@ -24,6 +24,12 @@
 </nav>
 
 <div class="container">
+    <?php if (session()->getFlashdata('success')): ?>
+    <div class="alert alert-success mt-3 mx-3">
+        <?= session()->getFlashdata('success') ?>
+    </div>
+<?php endif; ?>
+
     <?= $this->renderSection('content') ?>
 </div>
 </body>

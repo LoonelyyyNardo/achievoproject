@@ -6,6 +6,8 @@ use CodeIgniter\Controller;
 
 class TasksController extends Controller
 {
+
+    protected $taskModel;
     public function index()
     {
         $taskModel = new TaskModel();
@@ -42,4 +44,12 @@ class TasksController extends Controller
 
         return redirect()->to('/tasks');
     }
+     public function done($id)
+{
+    $taskModel = new TaskModel();
+    $taskModel->update($id, ['status' => 'done']);
+    return redirect()->to('/tasks');
+}
+
+
 }
