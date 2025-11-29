@@ -5,9 +5,15 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+
+// Default & Dashboard
 $routes->get('/', 'Home::index');
 $routes->get('dashboard', 'MainController::dashboard');
 $routes->get('/dashboard', 'MainController::dashboard');
+// Login a Logout
+$routes->get('/login', 'AuthController::login');
+$routes->post('/login', 'AuthController::processLogin');
+$routes->get('/logout', 'AuthController::logout');
 
 // Úkoly
 $routes->get('/tasks', 'TasksController::index');

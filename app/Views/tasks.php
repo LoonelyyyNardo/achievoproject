@@ -45,13 +45,10 @@
                     </td>
 
                     <td>
-                        <!-- Tlačítko Dokončit jen u pending -->
                         <?php if ($task['status'] === 'pending'): ?>
                             <a href="<?= base_url('tasks/done/' . $task['id']) ?>" 
                                class="btn btn-success btn-sm mb-1">Dokončit</a>
                         <?php endif; ?>
-
-                        <!-- Tlačítko Smazat -->
                         <a href="<?= base_url('tasks/delete/' . $task['id']) ?>" 
                            class="btn btn-danger btn-sm"
                            onclick="return confirm('Opravdu chceš smazat tento úkol?')">Smazat</a>
