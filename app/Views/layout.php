@@ -15,13 +15,67 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
     <div class="container">
-        <a class="navbar-brand" href="<?= base_url('dashboard') ?>">Achievo</a>
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="<?= base_url('dashboard') ?>">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link" href="<?= base_url('tasks') ?>">Úkoly</a></li>
-        </ul>
+
+        <a class="navbar-brand fw-bold" href="<?= base_url('/') ?>">
+            Achievo
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <!-- Levá část -->
+            <ul class="navbar-nav me-auto">
+                <?php if (session()->get('logged_in')): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('dashboard') ?>">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('tasks') ?>">
+                            Úkoly
+                        </a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+
+            <!-- Pravá část -->
+            <ul class="navbar-nav align-items-center">
+                <?php if (session()->get('logged_in')): ?>
+
+                    <li class="nav-item me-3 text-light">
+                        Přihlášen:
+                        <strong><?= esc(session()->get('username')) ?></strong>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light btn-sm"
+                           href="<?= base_url('logout') ?>">
+                            Odhlásit
+                        </a>
+                    </li>
+
+                <?php else: ?>
+
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light btn-sm"
+                           href="<?= base_url('login') ?>">
+                            Přihlášení
+                        </a>
+                    </li>
+
+                <?php endif; ?>
+            </ul>
+
+        </div>
     </div>
 </nav>
+
 
 <div class="container">
     <?php if (session()->getFlashdata('success')): ?>

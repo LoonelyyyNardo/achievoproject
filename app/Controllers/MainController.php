@@ -1,35 +1,58 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Models\UserModel;
 use App\Models\TaskModel;
 
 class MainController extends BaseController
 {
     public function dashboard()
-{
-    $userModel = new UserModel();
-    $taskModel = new TaskModel();
+    {
+        // kontrola přihlášení
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/login');
+        }
 
-    $user_id = 1; // pro demo, můžeš nahradit dynamicky
-    $data['user'] = $userModel->find($user_id);
-    $data['tasks'] = $taskModel->where('user_id', $user_id)->findAll();
+        $userModel = new UserModel();
+        $taskModel = new TaskModel();
 
-    // body z existující tabulky points
-    $builder = $taskModel->db->table('points');
-    $row = $builder->where('user_id', $user_id)->get()->getRowArray();
-    $data['points'] = $row ? $row['points'] : 0;
+        // ID přihlášeného uživatele
+        $user_id = session()->get('user_id');
 
-    $data['title'] = 'Dashboard';
-    return view('dashboard', $data);
-}
+        // data uživatele
+        $data['user'] = $userModel->find($user_id);
+
+        // úkoly uživatele
+        $data['tasks'] = $taskModel
+            ->where('user_id', $user_id)
+            ->findAll();
+
+        // body z tabulky points
+        $builder = $taskModel->db->table('points');
+        $row = $builder->where('user_id', $user_id)->get()->getRowArray();
+        $data['points'] = $row ? $row['points'] : 0;
+
+        $data['title'] = 'Dashboard';
+
+        return view('dashboard', $data);
+    }
 
     public function tasks()
     {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/login');
+        }
+
         $taskModel = new TaskModel();
-        $user_id = 1; // pro demo
-        $data['tasks'] = $taskModel->where('user_id', $user_id)->findAll();
+        $user_id = session()->get('user_id');
+
+        $data['tasks'] = $taskModel
+            ->where('user_id', $user_id)
+            ->findAll();
+
         $data['title'] = 'Seznam úkolů';
+
         return view('tasks', $data);
     }
 }

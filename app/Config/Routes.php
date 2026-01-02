@@ -22,3 +22,4 @@ $routes->post('/tasks/store', 'TasksController::store');   // zpracování formu
 $routes->get('/tasks/delete/(:num)', 'TasksController::delete/$1'); // mazání
 $routes->get('tasks/done/(:num)', 'TasksController::done/$1');
 
+// Admin
