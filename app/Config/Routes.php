@@ -22,6 +22,12 @@ $routes->post('/tasks/store', 'TasksController::store');   // zpracování formu
 $routes->get('/tasks/delete/(:num)', 'TasksController::delete/$1'); // mazání
 $routes->get('tasks/done/(:num)', 'TasksController::done/$1');
 
+// Rozvrh
+$routes->get('/schedule', 'ScheduleController::index');
+
+// Calendar
+$routes->get('/calendar', 'CalendarController::index');
+
 // Admin
 $routes->get('/admin/users', 'AdminController::createUser');
 $routes->post('/admin/users/store', 'AdminController::storeUser');
