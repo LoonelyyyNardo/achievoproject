@@ -4,15 +4,16 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class TaskModel extends Model
+class PointsModel extends Model
 {
-    protected $table            = 'tasks';
+    protected $table            = 'points';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields = ['user_id', 'title', 'description', 'deadline', 'status', 'created_at','assign_type', 'assigned_to'];
+    protected $allowedFields    = ['user_id','task_id', 'points', 'awarded_by', 'note', 'created_at', 'updated_at'];
+
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
@@ -20,7 +21,7 @@ class TaskModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';

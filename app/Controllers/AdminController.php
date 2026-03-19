@@ -6,37 +6,48 @@ use App\Models\UserModel;
 
 class AdminController extends BaseController
 {
-    public function createUser()
+    public function users()
     {
-        // kontrola přihlášení a role
-        if (!session()->get('logged_in') || session()->get('role') !== 'admin') {
-            return redirect()->to('/dashboard');
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/login');
         }
 
-        return view('admin/create_user');
-    }
-
-    public function storeUser()
-    {
-        if (!session()->get('logged_in') || session()->get('role') !== 'admin') {
+        if (session()->get('role') !== 'admin') {
             return redirect()->to('/dashboard');
         }
 
         $userModel = new UserModel();
 
-        $data = [
-            'username' => $this->request->getPost('username'),
-            'email'    => $this->request->getPost('email'),
-            'password_hash' => password_hash(
-                $this->request->getPost('password'),
-                PASSWORD_DEFAULT
-            ),
-            'role'     => $this->request->getPost('role'),
-        ];
+        $data['users'] = $userModel->findAll();
+        $data['title'] = 'Správa uživatelů';
 
-        $userModel->insert($data);
+        return view('admin_users', $data);
+    }
 
-        return redirect()->to('/admin/users/create')
-            ->with('success', 'Uživatel byl úspěšně vytvořen.');
+    public function createUser()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to('/login');
+        }
+
+        if (session()->get('role') !== 'admin') {
+            return redirect()->to('/dashboard');
+        }
+
+        $userModel = new UserModel();
+
+        $username = $this->request->getPost('username');
+        $email = $this->request->getPost('email');
+        $password = $this->request->getPost('password');
+        $role = $this->request->getPost('role');
+
+        $userModel->insert([
+            'username' => $username,
+            'email' => $email,
+            'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+            'role' => $role
+        ]);
+
+        return redirect()->to('/admin/users')->with('success', 'Uživatel byl vytvořen.');
     }
 }

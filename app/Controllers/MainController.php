@@ -9,7 +9,6 @@ class MainController extends BaseController
 {
     public function dashboard()
     {
-        // kontrola přihlášení
         if (!session()->get('logged_in')) {
             return redirect()->to('/login');
         }
@@ -17,42 +16,61 @@ class MainController extends BaseController
         $userModel = new UserModel();
         $taskModel = new TaskModel();
 
-        // ID přihlášeného uživatele
-        $user_id = session()->get('user_id');
+        $userId = (string) session()->get('user_id');
+        $role = session()->get('role');
 
-        // data uživatele
-        $data['user'] = $userModel->find($user_id);
+        $allTasks = $taskModel->orderBy('deadline', 'ASC')->findAll();
 
-        // úkoly uživatele
-        $data['tasks'] = $taskModel
-            ->where('user_id', $user_id)
-            ->findAll();
+        if ($role === 'admin') {
+            $visibleTasks = $allTasks;
+        } else {
+            $visibleTasks = [];
 
-        // body z tabulky points
-        $builder = $taskModel->db->table('points');
-        $row = $builder->where('user_id', $user_id)->get()->getRowArray();
+            foreach ($allTasks as $task) {
+                $isCreator = ((string) $task['user_id'] === $userId);
+
+                if ($isCreator) {
+                    $visibleTasks[] = $task;
+                    continue;
+                }
+
+                if ($task['assign_type'] === 'all') {
+                    $visibleTasks[] = $task;
+                    continue;
+                }
+
+                if ($task['assign_type'] === 'single' && (string) $task['assigned_to'] === $userId) {
+                    $visibleTasks[] = $task;
+                    continue;
+                }
+
+                if ($task['assign_type'] === 'selected' && !empty($task['assigned_to'])) {
+                    $ids = array_map('trim', explode(',', $task['assigned_to']));
+                    if (in_array($userId, $ids, true)) {
+                        $visibleTasks[] = $task;
+                    }
+                }
+            }
+        }
+
+        $data['user'] = $userModel->find($userId);
+        $data['tasks'] = $visibleTasks;
+        $data['task_count'] = count($visibleTasks);
+
+        $pendingCount = 0;
+        foreach ($visibleTasks as $task) {
+            if ($task['status'] === 'pending') {
+                $pendingCount++;
+            }
+        }
+        $data['pending_count'] = $pendingCount;
+
+        $db = \Config\Database::connect();
+        $row = $db->table('points')->where('user_id', $userId)->get()->getRowArray();
         $data['points'] = $row ? $row['points'] : 0;
 
         $data['title'] = 'Dashboard';
 
         return view('dashboard', $data);
-    }
-
-    public function tasks()
-    {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/login');
-        }
-
-        $taskModel = new TaskModel();
-        $user_id = session()->get('user_id');
-
-        $data['tasks'] = $taskModel
-            ->where('user_id', $user_id)
-            ->findAll();
-
-        $data['title'] = 'Seznam úkolů';
-
-        return view('tasks', $data);
     }
 }
