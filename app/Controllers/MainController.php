@@ -73,4 +73,10 @@ class MainController extends BaseController
 
         return view('dashboard', $data);
     }
+
+    public function about()
+    {
+        $data['title'] = 'O mně';
+        return view('about', $data);
+    }
 }

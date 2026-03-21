@@ -64,10 +64,10 @@
                             </a>
                         <?php endif; ?>
 
-                        <a href="<?= base_url('tasks/delete/' . $task['id']) ?>" 
-                           class="btn btn-danger btn-sm"
-                           onclick="return confirm('Opravdu chceš smazat tento úkol?')">
-                            Smazat
+                        <a href="<?= base_url('tasks/archive/' . $task['id']) ?>" 
+                           class="btn btn-outline-secondary btn-sm"
+                           onclick="return confirm('Opravdu chceš archivovat tento úkol?')">
+                            Archivovat
                         </a>
                     </td>
                 </tr>

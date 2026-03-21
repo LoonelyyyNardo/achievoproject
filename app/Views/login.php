@@ -25,4 +25,13 @@
     </form>
 </div>
 
+<div style="height:40px;"></div>
+
+<div class="aboutme">
+    © <?= date('Y') ?> Achievo |
+    <a href="<?= base_url('about') ?>" style="color:#aaa; text-decoration:none;">
+        O webu
+    </a>
+</div>
+
 <?= $this->endSection() ?>

@@ -21,7 +21,7 @@ $routes->get('tasks', 'TasksController::index');
 $routes->get('tasks/add', 'TasksController::add');
 $routes->post('tasks/store', 'TasksController::store');
 $routes->get('tasks/done/(:num)', 'TasksController::done/$1');
-$routes->get('tasks/delete/(:num)', 'TasksController::delete/$1');
+$routes->get('tasks/archive/(:num)', 'TasksController::archive/$1');
 
 // Rozvrh
 $routes->get('/schedule', 'ScheduleController::index');
@@ -37,8 +37,12 @@ $routes->get('/leaderboard', 'LeaderboardController::index');
 $routes->get('/points/form/(:num)/(:num)', 'PointsController::form/$1/$2');
 $routes->post('/points/save', 'PointsController::save');
 $routes->get('/points/task/(:num)', 'PointsController::taskStudents/$1');
-$routes->get('/leaderboard', 'PointsController::leaderboard');
+$routes->get('/points/student/(:num)', 'PointsController::studentTasks/$1');
+$routes->get('/points/leaderboard', 'PointsController::leaderboard');
 
 // Admin
 $routes->get('admin/users', 'AdminController::users');
 $routes->post('admin/create-user', 'AdminController::createUser');
+
+// About
+$routes->get('/about', 'MainController::about');

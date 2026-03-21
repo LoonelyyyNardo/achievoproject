@@ -18,7 +18,10 @@ class TasksController extends BaseController
         $role = session()->get('role');
         $currentUserId = (string) session()->get('user_id');
 
-        $allTasks = $taskModel->orderBy('deadline', 'ASC')->findAll();
+        $allTasks = $taskModel
+    ->where('is_archived', 0)
+    ->orderBy('deadline', 'ASC')
+    ->findAll();
 
         if ($role === 'admin') {
             $data['tasks'] = $allTasks;
@@ -129,30 +132,30 @@ class TasksController extends BaseController
         return redirect()->to('/tasks')->with('success', 'Úkol byl vytvořen.');
     }
 
-    public function delete($id)
-    {
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/login');
-        }
-
-        $taskModel = new TaskModel();
-        $task = $taskModel->find($id);
-
-        if (!$task) {
-            return redirect()->to('/tasks');
-        }
-
-        $role = session()->get('role');
-        $currentUserId = (string) session()->get('user_id');
-
-        if ($role !== 'admin' && (string) $task['user_id'] !== $currentUserId) {
-            return redirect()->to('/tasks');
-        }
-
-        $taskModel->delete($id);
-
-        return redirect()->to('/tasks')->with('success', 'Úkol byl smazán.');
+    public function archive($id)
+{
+    if (!session()->get('logged_in')) {
+        return redirect()->to('/login');
     }
+
+    $taskModel = new TaskModel();
+    $task = $taskModel->find($id);
+
+    if (!$task) {
+        return redirect()->to('/tasks');
+    }
+
+    $role = session()->get('role');
+    $currentUserId = (string) session()->get('user_id');
+
+    if ($role !== 'admin' && (string) $task['user_id'] !== $currentUserId) {
+        return redirect()->to('/tasks');
+    }
+
+    $taskModel->update($id, ['is_archived' => 1]);
+
+    return redirect()->to('/tasks')->with('success', 'Úkol byl archivován.');
+}
 
     public function done($id)
     {
